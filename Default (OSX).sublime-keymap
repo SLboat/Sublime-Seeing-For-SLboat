@@ -1,5 +1,6 @@
 [
     {
-        "keys": ["ctrl+o"],"command":"新音频见识",
+	"keys": ["ctrl+n"],"command":"新音频见识",
+	"keys": ["ctrl+s"],"command":"当前音频见识",
     }
 ]
