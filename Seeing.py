@@ -11,6 +11,9 @@ import subprocess
 * 下一首新见识的时候暂停一些时间在播放...
 ==Done==
 * call单独出来一个函数
+==路径==
+* 当前放置在路径
+: /Users/sen/Documents/AppleScript/音频见识/
 '''
 
 # 集成化的处理调用applescript..
@@ -34,6 +37,8 @@ class 当前音频见识(sublime_plugin.TextCommand):
 		self.view.sel().add(s0_region.begin());
 		# 后续清理一些别的
 		self.view.replace(edit,self.view.find("音频见识",0),"")
+		# 这里不允许清楚在标题里的,或许另外的可以直接匹配[音频想法=]
+		self.view.replace(edit,self.view.find("(?<!=)音频想法",0),"")
 		self.view.replace(edit,self.view.find("	",0),"")
 
 class 清理想法(sublime_plugin.TextCommand):
@@ -69,7 +74,7 @@ class 自动事件(sublime_plugin.EventListener):
 	def on_query_completions(self, view, word, locations):
 		if view.settings().get('syntax').find("Mediawiki")<0:
 			return #不是mw,不工作
-		if word == "音频见识":
+		if word == "音频见识" or word == "音频想法":
 			view.run_command("当前音频见识")
 			return
 		elif word == "非想法":
