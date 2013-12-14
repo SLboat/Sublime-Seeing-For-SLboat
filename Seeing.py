@@ -80,7 +80,7 @@ class 自动事件(sublime_plugin.EventListener):
 		elif word == "非想法":
 			view.run_command("清理想法")
 			return
-		print("触发了一个"+word)
+		print("信息:触发了一个"+word)
 		# return autocomplete_list
 
 	def on_new(self,view): #绑定新窗口自动设置为航海见识
