@@ -14,5 +14,13 @@
 	{
 		"keys": ["ctrl+c"],"command":"清理想法",
     		"context": [{"key": "selector", "operator": "equal", "operand": "text.html.mediawiki"}]
+	},
+	{
+		"keys": ["ctrl+z"],"command":"复制所有",
+    		"context": [{"key": "selector", "operator": "equal", "operand": "text.html.mediawiki"}]
+	},
+	{
+		"keys": ["ctrl+x"],"command":"去往航海见识",
+    		"context": [{"key": "selector", "operator": "equal", "operand": "text.html.mediawiki"}]
 	}
 ]

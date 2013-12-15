@@ -3,6 +3,8 @@
 import sublime, sublime_plugin
 # 导入子进程的玩意
 import subprocess
+# 系统库
+import os
 
 '''
 ==TODO==
@@ -13,17 +15,35 @@ import subprocess
 * call单独出来一个函数
 ==路径==
 * 当前放置在路径
-: /Users/sen/Documents/AppleScript/音频见识/
+: /Users/sen/Documents/AppleScript/音频见识*/
 '''
 
 # 集成化的处理调用applescript..
-def run_applescript(script_name):
+def run_applescript(args):
+	base_path = "/Users/sen/Documents/AppleScript/音频见识建造/"
+	if type(args)==list:
+		script_name = args[0]; # 第一个值
+		arg_part = args[1]; # 第二个值
+	else:
+		script_name = args; # 假设为只有字符串
+		arg_part = ""; # 空白
+	# 处理,见识替身文件
+	scirpt_file = base_path+script_name; # 基础文件名
+	if not os.path.isfile(scirpt_file): # 检查替身是否存在
+		scirpt_file = scirpt_file+".scpt";
+	print("scirpt_file")
+	call_command = ["osascript", scirpt_file]; # 呼叫命令
+	if arg_part != "":
+		call_command.append(arg_part);
 	# 基本路径,放置脚本的路径
-	base_path = "/Users/sen/Documents/AppleScript/音频见识/"
-	return subprocess.check_output(["osascript", base_path+script_name+".scpt"]).decode("utf-8");
+	return subprocess.check_output(call_command).decode("utf-8");
+
+# 状态栏提醒
+def log(str):
+	sublime.status_message(str);
 
 class 当前音频见识(sublime_plugin.TextCommand):
-	def run(self, edit):
+	def run(self, edit):	
 		# self.window.new_file()
 		# 记住当前位置
 		pos = self.view.sel()[0].begin();
@@ -40,11 +60,13 @@ class 当前音频见识(sublime_plugin.TextCommand):
 		# 这里不允许清楚在标题里的,或许另外的可以直接匹配[音频想法=]
 		self.view.replace(edit,self.view.find("(?<!=)音频想法",0),"")
 		self.view.replace(edit,self.view.find("	",0),"")
+		log("船长,已送出当前音频见识");
 
 class 清理想法(sublime_plugin.TextCommand):
 	def run(self,edit):
-		self.view.replace(edit,self.view.find("\[\[分类\:想法\]\]",0),"")
+		self.view.replace(edit,self.view.find("\n+\[\[分类\:想法\]\]",0),"")
 		self.view.replace(edit,self.view.find("非想法",0),"")
+		log("船长,已清理分类想法");
 
 class 新音频见识(sublime_plugin.WindowCommand):
 	def run(self):
@@ -53,11 +75,34 @@ class 新音频见识(sublime_plugin.WindowCommand):
 		view = self.window.new_file()
 		view.set_syntax_file(syntax)
 		view.run_command("当前音频见识")
+		log("船长,已在新船长里制造了音频见识");
 
 class 下一首见识(sublime_plugin.WindowCommand):
 	def run(self):
-		val=run_applescript("iTunes 下一首");
+		val = run_applescript("iTunes 下一首");
 		print(val)
+		log("船长,去往下一首了");
+
+class 复制所有(sublime_plugin.TextCommand):
+	def run(self, edit):
+		self.view.run_command("选择所有");
+		# 取得所有的内容
+		content = self.view.substr(sublime.Region(0, self.view.size()));
+		# 送到剪贴板
+		sublime.set_clipboard(content)
+		self.view.run_command("去往航海见识");
+		log("船长,所有→都被复制了");
+
+
+class 去往航海见识(sublime_plugin.TextCommand):
+	def run(self,edit):
+		log("船长,咋去往航海见识咯");
+		val = run_applescript("Chrome 进入航海见识");
+
+class 选择所有(sublime_plugin.TextCommand):
+	def run(self,edit):
+		self.view.sel().clear(); #清理
+		self.view.sel().add(sublime.Region(0, self.view.size())) 
 
 #暂未使用这里
 class 快退(sublime_plugin.WindowCommand):
