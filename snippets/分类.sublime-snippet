@@ -1,0 +1,9 @@
+<snippet>
+	<content><![CDATA[
+ 
+[[分类:${1}]]
+]]></content>
+<tabTrigger>分类</tabTrigger>
+	<scope>text.html.mediawiki</scope>
+<description>音频见识:分类制造</description>
+</snippet>

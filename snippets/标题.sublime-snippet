@@ -1,0 +1,9 @@
+<snippet>
+	<content><![CDATA[
+ 
+[[标题:${1}]]
+]]></content>
+<tabTrigger>标题</tabTrigger>
+	<scope>text.html.mediawiki</scope>
+<description>音频见识:标题制造</description>
+</snippet>
