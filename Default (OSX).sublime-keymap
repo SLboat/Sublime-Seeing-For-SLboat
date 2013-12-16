@@ -16,7 +16,7 @@
     		"context": [{"key": "selector", "operator": "equal", "operand": "text.html.mediawiki"}]
 	},
 	{
-		"keys": ["ctrl+z"],"command":"复制所有",
+		"keys": ["ctrl+q"],"command":"复制所有",
     		"context": [{"key": "selector", "operator": "equal", "operand": "text.html.mediawiki"}]
 	},
 	{

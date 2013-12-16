@@ -4,7 +4,7 @@ import sublime, sublime_plugin
 # 导入子进程的玩意
 import subprocess
 # 系统库
-import os
+import os,re
 
 '''
 ==TODO==
@@ -38,12 +38,33 @@ def run_applescript(args):
 	# 基本路径,放置脚本的路径
 	return subprocess.check_output(call_command).decode("utf-8");
 
+# 去往航海见识
+def go_see(title):
+	val = run_applescript(["Chrome 进入航海见识",title]);
+
 # 状态栏提醒
 def log(str):
 	sublime.status_message(str);
 
+# 获得标题标记
+def get_title_flag(content):
+	title_re = re.compile(r"\|标题:(.+)\|");
+	title=title_re.search(content);
+	if title:
+		return title.group(1);
+	return None; #无效
+
+# 清除标题标记
+def clear_title_flag(content):
+	#带有吸收换行的正则
+	title=re.search(r"(\n*\|标题:.+\|)",content);
+	if title:
+		return content.replace(title.group(1),"");
+	print ("工作异常..."); #不应该这里出现..
+	return content
+
 class 当前音频见识(sublime_plugin.TextCommand):
-	def run(self, edit):	
+	def run(self, edit):
 		# self.window.new_file()
 		# 记住当前位置
 		pos = self.view.sel()[0].begin();
@@ -85,24 +106,34 @@ class 下一首见识(sublime_plugin.WindowCommand):
 
 class 复制所有(sublime_plugin.TextCommand):
 	def run(self, edit):
+		title = "";# 默认空白标题
 		self.view.run_command("选择所有");
 		# 取得所有的内容
 		content = self.view.substr(sublime.Region(0, self.view.size()));
-		# 送到剪贴板
-		sublime.set_clipboard(content)
-		self.view.run_command("去往航海见识");
-		log("船长,所有→都被复制了");
+		if "[[分类:想法]]" in content: # 是否存在想法
+			title = "想法 "; #默认想法
+		if get_title_flag(content):
+			flag_title=get_title_flag(content); # 获得标题内容
+			content = clear_title_flag(content);
+			log("船长,发现标题[%s],已送到航海见识..." % flag_title);
+			title = title + flag_title + "+"; # 最终标题
+		else:
+			log("船长,没有标题,直接送到航海见识...");
 
-
+		# 第一段路-送到剪贴板
+		sublime.set_clipboard(content);
+		# 第二段路-前往开船...
+		go_see(title);
+		
 class 去往航海见识(sublime_plugin.TextCommand):
 	def run(self,edit):
 		log("船长,咋去往航海见识咯");
-		val = run_applescript("Chrome 进入航海见识");
+		go_see("")
 
 class 选择所有(sublime_plugin.TextCommand):
 	def run(self,edit):
 		self.view.sel().clear(); #清理
-		self.view.sel().add(sublime.Region(0, self.view.size())) 
+		self.view.sel().add(sublime.Region(0, self.view.size()))
 
 #暂未使用这里
 class 快退(sublime_plugin.WindowCommand):
@@ -112,7 +143,7 @@ class 快退(sublime_plugin.WindowCommand):
 class 定时15分钟(sublime_plugin.TextCommand):
 	def  run(self,edit):
 		subprocess.check_output(["open","timebar://whimsicalifornia.com/start?duration=900"])
-		
+
 
 class 自动事件(sublime_plugin.EventListener):
 	# self是自己,view是试图,prefix就是当前的引导文字,locations则是位置
@@ -127,7 +158,7 @@ class 自动事件(sublime_plugin.EventListener):
 			return
 		print("信息:触发了一个"+word)
 		# return autocomplete_list
-
+	
 	def on_new(self,view): #绑定新窗口自动设置为航海见识
 		syntax = "Packages/Mediawiker-SLboat-Mod/Mediawiki.tmLanguage"
 		view.set_syntax_file(syntax)
