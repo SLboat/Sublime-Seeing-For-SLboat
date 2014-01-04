@@ -4,7 +4,7 @@
     { "caption": "音频见识: 下一首", "command": "下一首见识" },
     { "caption": "音频见识: 清理想法分类", "command": "清理想法" },   
     { "caption": "音频见识: 定时15分钟", "command": "定时15分钟" },   
-    { "caption": "音频见识: 复制所有", "command": "复制所有" },   
+    { "caption": "音频见识: 复制所有-去往见识", "command": "复制所有" },   
     { "caption": "音频见识: 选择所有", "command": "选择所有" },   
-
+    { "caption": "音频见识: 去往航海见识", "command": "去往航海见识" },   
 ]

@@ -1,7 +1,7 @@
 <snippet>
 	<content><![CDATA[
  
-[[标题:${1}]]
+|标题:${1}|
 ]]></content>
 <tabTrigger>标题</tabTrigger>
 	<scope>text.html.mediawiki</scope>
