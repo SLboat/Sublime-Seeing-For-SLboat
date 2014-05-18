@@ -1,4 +1,4 @@
-''' 这是森亮号的第一个小玩意 '''
+''' 这是森亮号的第一个Sublime的小玩意,用于音频见识转录 '''
 
 import sublime, sublime_plugin
 # 导入子进程的玩意
@@ -86,6 +86,7 @@ class 当前音频见识(sublime_plugin.TextCommand):
 class 清理想法(sublime_plugin.TextCommand):
 	def run(self,edit):
 		self.view.replace(edit,self.view.find("\n+\[\[分类\:想法\]\]",0),"")
+        # 更好的做法应该取得位置,减去长度和匹配...
 		self.view.replace(edit,self.view.find("非想法",0),"")
 		log("船长,已清理分类想法");
 
@@ -134,6 +135,17 @@ class 选择所有(sublime_plugin.TextCommand):
 	def run(self,edit):
 		self.view.sel().clear(); #清理
 		self.view.sel().add(sublime.Region(0, self.view.size()))
+#后来的发生
+class 后来(sublime_plugin.TextCommand):
+    def run(self,edit):
+        pos = self.view.sel()[0].begin();
+        before_content = self.view.substr(sublime.Region(0,pos)); #光标前的内容
+        
+        print("之前的内容",before_content); #调试信息
+        
+        
+        
+        log("当前的位置是" + str(pos));
 
 #暂未使用这里
 class 快退(sublime_plugin.WindowCommand):
@@ -157,6 +169,7 @@ class 自动事件(sublime_plugin.EventListener):
 			view.run_command("清理想法")
 			return
 		print("信息:触发了一个"+word)
+		return
 		# return autocomplete_list
 	
 	def on_new(self,view): #绑定新窗口自动设置为航海见识

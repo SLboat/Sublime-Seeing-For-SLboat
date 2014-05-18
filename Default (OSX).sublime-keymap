@@ -27,5 +27,9 @@
 	{
 		"keys": ["ctrl+x"],"command":"去往航海见识",
     		"context": [{"key": "selector", "operator": "equal", "operand": "text.html.mediawiki"}]
-	}
+	},
+    {
+		"keys": ["ctrl+."],"command":"后来",
+    		"context": [{"key": "selector", "operator": "equal", "operand": "text.html.mediawiki"}]
+	},
 ]
