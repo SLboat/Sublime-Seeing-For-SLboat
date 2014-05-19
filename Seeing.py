@@ -5,6 +5,7 @@ import sublime, sublime_plugin
 import subprocess
 # 系统库
 import os,re
+import datetime
 
 '''
 ==TODO==
@@ -135,16 +136,25 @@ class 选择所有(sublime_plugin.TextCommand):
 	def run(self,edit):
 		self.view.sel().clear(); #清理
 		self.view.sel().add(sublime.Region(0, self.view.size()))
+
 #后来的发生
 class 后来(sublime_plugin.TextCommand):
     def run(self,edit):
         pos = self.view.sel()[0].begin();
         before_content = self.view.substr(sublime.Region(0,pos)); #光标前的内容
-        
-        print("之前的内容",before_content); #调试信息
-        
-        
-        
+        # print("之前的内容",before_content); #调试信息
+        datapat = re.compile("\[\[File\:(\d{2})(\d{2})(\d{2})_\d{3}\.MP3\]\]")
+        match_date = datapat.search(before_content);
+        if match_date:
+        	#print (match_date.groups()); #调试用
+        	mp3_day = datetime.date(int("20" + match_date.group(1)),int(match_date.group(2)),int(match_date.group(3)));
+        	today = datetime.date.today();
+        	diffday = today - mp3_day; #差值
+        	self.view.insert(edit,pos,"\n:[后来-" + str(diffday.days) + "天后]->")
+
+        else:
+        	#todo 移到最后一行
+        	self.view.insert(edit,pos,"\n:[后来-若干时间后]->")
         log("当前的位置是" + str(pos));
 
 #暂未使用这里
