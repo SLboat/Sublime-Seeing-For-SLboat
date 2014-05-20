@@ -71,7 +71,8 @@ class 当前音频见识(sublime_plugin.TextCommand):
 		pos = self.view.sel()[0].begin();
 		val=run_applescript("iTunes 音频见识想法")
 		self.view.insert(edit, pos, val)
-		s0_region=self.view.find("\$0",0)
+		#这是特意做的标记...但是看起来可以不需要了...
+		s0_region=self.view.find("\$0",0);
 		self.view.replace(edit,s0_region,"")
 		# 试试移动鼠标好了
 		self.view.sel().clear();
@@ -140,7 +141,7 @@ class 选择所有(sublime_plugin.TextCommand):
 #后来的发生
 class 后来(sublime_plugin.TextCommand):
     def run(self,edit):
-        pos = self.view.sel()[0].begin();
+        pos = self.view.sel()[0].begin(); #获得当前鼠标所在位置
         before_content = self.view.substr(sublime.Region(0,pos)); #光标前的内容
         # print("之前的内容",before_content); #调试信息
         datapat = re.compile("\[\[File\:(\d{2})(\d{2})(\d{2})_\d{3}\.MP3\]\]")
@@ -150,8 +151,15 @@ class 后来(sublime_plugin.TextCommand):
         	mp3_day = datetime.date(int("20" + match_date.group(1)),int(match_date.group(2)),int(match_date.group(3)));
         	today = datetime.date.today();
         	diffday = today - mp3_day; #差值
-        	self.view.insert(edit,pos,"\n:[后来-" + str(diffday.days) + "天后]->")
-
+        	line_end_pos = self.view.line(pos).end(); #获得下一行开始的位置
+        	laterday_Str="\n:[后来-" + str(diffday.days) + "天后]->"; #后来的日期
+        	self.view.insert(edit,line_end_pos,laterday_Str);
+        	self.view.sel().clear();
+			# 去到某个位置去
+        	pos_at_end = line_end_pos + len(laterday_Str); #结束结尾字符
+        	self.view.sel().clear(); #清除选择
+        	self.view.sel().add(sublime.Region(pos_at_end,pos_at_end)); #选择过去
+        	self.view.show(pos_at_end); #滚动到位置
         else:
         	#todo 移到最后一行
         	self.view.insert(edit,pos,"\n:[后来-若干时间后]->")
