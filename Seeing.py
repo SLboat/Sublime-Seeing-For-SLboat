@@ -170,6 +170,7 @@ class 快退(sublime_plugin.WindowCommand):
 	def run(self):
 		val=run_applescript("iTunes 快退");
 
+#废弃使用
 class 定时15分钟(sublime_plugin.TextCommand):
 	def  run(self,edit):
 		subprocess.check_output(["open","timebar://whimsicalifornia.com/start?duration=900"])
