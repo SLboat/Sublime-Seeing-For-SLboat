@@ -8,10 +8,6 @@
     	    	"context": [{"key": "selector", "operator": "equal", "operand": "text.html.mediawiki"}]
     	},
 	{
-		"keys": ["ctrl+s"],"command":"当前音频见识",
-    		"context": [{"key": "selector", "operator": "equal", "operand": "text.html.mediawiki"}]
-	},
-	{
 		"keys": ["ctrl+c"],"command":"清理想法",
     		"context": [{"key": "selector", "operator": "equal", "operand": "text.html.mediawiki"}]
 	},
